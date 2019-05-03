@@ -9,8 +9,10 @@ const knex = require("knex");
 const constants = require("./server-constants");
 
 const app = express();
-app.listen(constants.PORT, () => {
-	console.debug(`App is up and running on Port ${constants.PORT}`);
+const ACTIVE_PORT = constants.PORT || constants.DEFAULT_PORT;
+
+app.listen(ACTIVE_PORT, () => {
+	console.log(`App is up and running on Port ${ACTIVE_PORT}`);
 });
 
 const db = knex({
