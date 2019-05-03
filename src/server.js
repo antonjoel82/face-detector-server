@@ -25,6 +25,14 @@ const db = knex({
   }
 });
 
+const corsFilter = (request, response) => {
+	response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+	response.setHeader("Access-Control-Allow-Credentials", "true");
+	response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+	response.setHeader("Access-Control-Max-Age", "3600");
+	response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+}
+
 //Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -74,6 +82,7 @@ app.post("/register", (req, res) => {
 		.into("login")
 		.returning("email")
 		.then((loginEmail) => {
+			corsFilter(req, res);
 			return trx("users")
 					.returning("*")
 					.insert({
@@ -83,7 +92,6 @@ app.post("/register", (req, res) => {
 					})
 					.then((users) => {
 						console.debug("Registered new user: ", users[0]);
-						res.setHeader("Access-Control-Allow-Origin", "*");
 						return res.json(users[0]);
 					})
 					.catch((err) => {
