@@ -83,6 +83,7 @@ app.post("/register", (req, res) => {
 					})
 					.then((users) => {
 						console.debug("Registered new user: ", users[0]);
+						res.setHeader("Access-Control-Allow-Origin", "*");
 						return res.json(users[0]);
 					})
 					.catch((err) => {
