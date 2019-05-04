@@ -9,6 +9,10 @@ const knex = require("knex");
 const constants = require("./server-constants");
 
 const app = express();
+//Middleware
+app.use(cors());
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 const ACTIVE_PORT = constants.PORT || constants.DEFAULT_PORT;
 
 app.listen(ACTIVE_PORT, () => {
@@ -25,18 +29,13 @@ const db = knex({
   }
 });
 
-const corsFilter = (request, response) => {
-	response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-	response.setHeader("Access-Control-Allow-Credentials", "true");
-	response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-	response.setHeader("Access-Control-Max-Age", "3600");
-	response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
-}
-
-//Middleware
-app.use(cors());
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
+// const corsFilter = (request, response) => {
+// 	response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+// 	response.setHeader("Access-Control-Allow-Credentials", "true");
+// 	response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+// 	response.setHeader("Access-Control-Max-Age", "3600");
+// 	response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
+// }
 
 // app.get("/", (req, res) => {
 // 	res.json("Hitting Root Page.");
@@ -82,7 +81,7 @@ app.post("/register", (req, res) => {
 		.into("login")
 		.returning("email")
 		.then((loginEmail) => {
-			corsFilter(req, res);
+			// corsFilter(req, res);
 			return trx("users")
 					.returning("*")
 					.insert({
