@@ -9,6 +9,7 @@ const knex = require("knex");
 const constants = require("./server-constants");
 
 const app = express();
+
 //Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -37,9 +38,9 @@ const db = knex({
 // 	response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
 // }
 
-// app.get("/", (req, res) => {
-// 	res.json("Hitting Root Page.");
-// })
+app.get("/", (req, res) => {
+	res.json("Hitting Root Page.");
+})
 
 app.post("/signin", (req, res) => {
 	db.select("email", "hash")
