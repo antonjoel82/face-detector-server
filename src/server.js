@@ -83,6 +83,7 @@ app.post("/register", (req, res) => {
 		.returning("email")
 		.then((loginEmail) => {
 			// corsFilter(req, res);
+			console.log("Attempting to create entry in User's table.")
 			return trx("users")
 					.returning("*")
 					.insert({
@@ -91,11 +92,14 @@ app.post("/register", (req, res) => {
 						joined: new Date()
 					})
 					.then((users) => {
+						const respDebug = res.json(users[0]);
 						console.debug("Registered new user: ", users[0]);
-						return res.json(users[0]);
+						console.log("Sending Response for new user: ", respDebug);
+						return respDebug;
 					})
 					.catch((err) => {
 						console.debug(err);
+						console.log("Error in sending response: ", res);
 						return res.status(400).json(`Could not register user. Reason: ${err.detail}`);
 					})
 			})
