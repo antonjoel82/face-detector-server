@@ -21,12 +21,10 @@ app.listen(ACTIVE_PORT, () => {
 });
 
 const db = knex({
-  client: 'pg',
+  client: "pg",
   connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : 'test',
-    database : 'face-detector'
+		connectionString: process.env.DATABASE_URL,
+		ssl: true,
   }
 });
 
